@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 )
 async def search(client: Bot, message: Message|CallbackQuery):
     if isinstance(message, Message):
-        send_msg = await message.reply("__**Processing... ⏳**__", quote=True)
+        send_msg = await message.reply("__**ᴘʀᴏᴄᴇssɪɴɢ... ⏳**__", quote=True)
     else:
         await message.answer()
         send_msg = message.message
@@ -43,20 +43,20 @@ async def search(client: Bot, message: Message|CallbackQuery):
     except RuntimeError as e:
         logger.error(e)
         traceback.print_exc()
-        return await send_msg.edit("Connection refused by jiosaavn api. Please try again")
+        return await send_msg.edit("ᴄᴏɴɴᴇᴄᴛɪᴏɴ ʀᴇғᴜsᴇᴅ ʙʏ ᴀᴘɪ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ!")
 
     if not response:
-        return await send_msg.edit(f'🔎 No search result found for your query `{query}`')
+        return await send_msg.edit(f'🔎 ɴᴏ sᴇᴀʀᴄʜ ʀᴇsᴜʟᴛs ғᴏᴜɴᴅ ғᴏʀ ʏᴏᴜʀ ϙᴜᴇʀʏ `{query}`')
 
     buttons = []
     if search_type == "all" or search_type == "topquery":
         # Define the mapping for button labels and callback data based on result type
         button_song_type_map = {
-            "songs": (f"🎙 Songs", f"search#songs"),
-            "albums": (f"📚 Albums", f"search#albums"),
-            "playlists": (f"💾 Playlists", f"search#playlists"),
-            "artists": (f"👨‍🎤 Artists", f"search#artists"),
-            "topquery": (f"✨ Top Result", f"search#topquery"),
+            "songs": (f"🎙 sᴏɴɢs", f"search#songs"),
+            "albums": (f"📚 ᴀʟʙᴜᴍs", f"search#albums"),
+            "playlists": (f"💾 ᴘʟᴀʏʟɪsᴛs", f"search#playlists"),
+            "artists": (f"👨‍🎤 ᴀʀᴛɪsᴛs", f"search#artists"),
+            "topquery": (f"✨ ᴛᴏᴘ ʀᴇsᴜʟᴛs", f"search#topquery"),
         }
 
         if search_type == 'topquery':
@@ -94,7 +94,7 @@ async def search(client: Bot, message: Message|CallbackQuery):
                 if result.get("data"):
                     button_label, callback_data = button_song_type_map.get(result_type, (None, None))
                     buttons.append([InlineKeyboardButton(text=button_label, callback_data=callback_data)])
-        text = f"**🔍 Search Query:** {query}\n\n__Please select one catogery 👇__"
+        text = f"**🔍 sᴇᴀʀᴄʜ ϙᴜᴇʀʏ:** {query}\n\n__ᴘʟᴇᴀsᴇ sᴇʟᴇᴄᴛ ᴏɴᴇ ᴄᴀᴛᴇɢᴏʀʏ ⇊__"
     else:
         # Get the total number of results
         total_results = response.get("total", 0)
@@ -124,7 +124,7 @@ async def search(client: Bot, message: Message|CallbackQuery):
             if button_label:
                 buttons.append([InlineKeyboardButton(text=button_label, callback_data=f"{result_type}#{item_id}")])
 
-        text = f"**📈 Total Results:** {total_results}\n\n**🔍 Search Query:** {query}\n\n**📜 Page No:** {page_no}"
+        text = f"**📈 ᴛᴏᴛᴀʟ ʀᴇsᴜʟᴛs:** {total_results}\n\n**🔍 sᴇᴀʀᴄʜ ϙᴜᴇʀʏ:** {query}\n\n**📜 ᴘᴀɢᴇ ɴᴏ:** {page_no}"
         navigation_buttons = []
         if page_no > 1:
             navigation_buttons.append(InlineKeyboardButton("⬅️", callback_data=f"search#{search_type}#{page_no-1}"))
@@ -133,9 +133,9 @@ async def search(client: Bot, message: Message|CallbackQuery):
         if navigation_buttons:
             buttons.append(navigation_buttons)
 
-    buttons.append([InlineKeyboardButton('Close ❌', callback_data="close")])
+    buttons.append([InlineKeyboardButton('ᴄʟᴏsᴇ ❌', callback_data="close")])
 
     if not buttons:
-        return await send_msg.edit(f'🔎 No search result found for your query `{query}`')
+        return await send_msg.edit(f'🔎 ɴᴏ sᴇᴀʀᴄʜ ʀᴇsᴜʟᴛ ғᴏᴜɴᴅ ғᴏʀ ʏᴏᴜʀ ϙᴜᴇʀʏ `{query}`')
 
     await send_msg.edit(text, reply_markup=InlineKeyboardMarkup(buttons))
