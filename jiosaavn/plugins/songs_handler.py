@@ -31,11 +31,11 @@ async def handle_song_callback(client: Bot, callback: CallbackQuery):
     try:
         response = await Jiosaavn().get_song(song_id=song_id)
         if not response or not response.get("songs"):
-            return await msg.edit("**The requested song could not be found.**")
+            return await msg.edit("**ᴛʜᴇ ʀᴇϙᴜᴇsᴛᴇᴅ sᴏɴɢ ᴄᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ғᴏᴜɴᴅ**")
     except RuntimeError as e:
         logger.error(e)
         traceback.print_exc()
-        return await msg.edit("Connection refused by jiosaavn api. Please try again")
+        return await msg.edit("ᴄᴏɴɴᴇᴄᴛɪᴏɴ ʀᴇғᴜsᴇᴅ ʙʏ ᴀᴘɪ, ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ!")
 
     song_data = response["songs"][0]
 
@@ -65,16 +65,16 @@ async def handle_song_callback(client: Bot, callback: CallbackQuery):
 
     text_data = [
         f"[\u2063]({image_url})"
-        f"**🎧 Song:** [{title}]({song_url})" if title else '',
-        f"**📚 Album:** [{album}]({album_url})" if album else '',
-        f"**🎵 Music:** {music}" if music else '',
-        f"**▶️ Plays:** {play_count:,}" if play_count else '',
-        f"**👨‍🎤 Singers:** {singers}" if singers else '',
-        f"**✍️ Lyricist:** {lyricists}" if lyricists else '',
-        f"**👫 Actors:** {actors}" if actors else '',
-        f"**📰 Language:** {language}" if language else '',
-        f"**📆 Release Date:** __{release_date}__" if release_date else '',
-        f"**📆 Release Year:** __{release_year}__" if not release_date and release_year else '',
+        f"**🎧 sᴏɴɢ:** [{title}]({song_url})" if title else '',
+        f"**📚 ᴀʟʙᴜᴍ:** [{album}]({album_url})" if album else '',
+        f"**🎵 ᴍᴜsɪᴄ:** {music}" if music else '',
+        f"**▶️ ᴘʟᴀʏs:** {play_count:,}" if play_count else '',
+        f"**👨‍🎤 sɪɴɢᴇʀ:** {singers}" if singers else '',
+        f"**✍️ ʟʏʀɪᴄɪsᴛ:** {lyricists}" if lyricists else '',
+        f"**👫 ᴀᴄᴛᴏʀs:** {actors}" if actors else '',
+        f"**📰 ʟᴀɴɢᴜᴀɢᴇ:** {language}" if language else '',
+        f"**📆 ʀᴇʟᴇᴀsᴇ ᴅᴀᴛᴇ:** __{release_date}__" if release_date else '',
+        f"**📆 ʀᴇʟᴇᴀsᴇ ʏᴇᴀʀ:** __{release_year}__" if not release_date and release_year else '',
     ]
     text = "\n\n".join(filter(None, text_data))
 
@@ -86,11 +86,11 @@ async def handle_song_callback(client: Bot, callback: CallbackQuery):
         back_button_callback_data = f"search#{search_type}"
 
     buttons = [[
-        InlineKeyboardButton('Upload to TG 📤', callback_data=f'upload#{song_id}#song')
+        InlineKeyboardButton('ᴜᴘʟᴏᴀᴅ ᴛᴏ ᴛɢ 📤', callback_data=f'upload#{song_id}#song')
     ], [
-        InlineKeyboardButton('🔙', callback_data=back_button_callback_data)
+        InlineKeyboardButton('⇋ ʙᴀᴄᴋ ⇋', callback_data=back_button_callback_data)
     ], [
-        InlineKeyboardButton('Close ❌', callback_data="close")
+        InlineKeyboardButton('ᴄʟᴏsᴇ ❌', callback_data="close")
     ]]
     if more_info.get('has_lyrics') == 'true':
         lyrics_id = song_data.get("id")
@@ -98,7 +98,7 @@ async def handle_song_callback(client: Bot, callback: CallbackQuery):
         if item_id:
             lyrics_button_callback_data += f"#{item_id}#{back_type}"
 
-        buttons[0].insert(0, InlineKeyboardButton("Lyrics 📃", callback_data=lyrics_button_callback_data))
+        buttons[0].insert(0, InlineKeyboardButton("ʟʏʀɪᴄs 📃", callback_data=lyrics_button_callback_data))
 
     await msg.edit(text=text[:4096], reply_markup=InlineKeyboardMarkup(buttons))
     
@@ -114,19 +114,19 @@ async def lyrics(client: Bot, callback: CallbackQuery):
     lyrics = response.get("lyrics", "")
     lyrics = lyrics.replace("<br>", "\n")
     if not lyrics:
-        await callback.answer("**The requested song could not be found.**", show_alert=True)
+        await callback.answer("**ᴛʜᴇ ʀᴇϙᴜᴇsᴛᴇᴅ sᴏɴɢ ᴄᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ғᴏᴜɴᴅ**", show_alert=True)
         return
 
     if len(lyrics) <= 4096:
         callback_data = "song#" + "#".join(data[2:])
-        button = [[InlineKeyboardButton('🔙', callback_data=callback_data)]]
+        button = [[InlineKeyboardButton('⇋ ʙᴀᴄᴋ ⇋', callback_data=callback_data)]]
         try:
             await callback.answer()
             await callback.message.edit(lyrics, reply_markup=InlineKeyboardMarkup(button))
         except:
             pass
     else:
-        await callback.answer("Sending a song lyrics document")
+        await callback.answer("ʟʏʀɪᴄs ᴄʜᴀʀᴀᴄᴛᴇʀ ʟᴇɴɢᴛʜ > 4000, sᴇɴᴅɪɴɢ sᴏɴɢ ʟʏʀɪᴄs ᴅᴏᴄᴜᴍᴇɴᴛ")
         file_location = f"{response.get("snippet")} song lyrics.txt"
         with open(file_location, 'w') as f:
             f.write(lyrics)
