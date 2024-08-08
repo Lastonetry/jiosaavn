@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 async def download(client: Bot, message: Message|CallbackQuery):
     if isinstance(message, CallbackQuery):
         _, item_id, search_type = message.data.split("#")
-        msg = await message.message.edit("**Processing...**")
+        msg = await message.message.edit("**ᴘʀᴏᴄᴇssɪɴɢ...**")
     else:
-        msg = await message.reply("**Processing...**", quote=True)
+        msg = await message.reply("**ᴘʀᴏᴄᴇssɪɴɢ...**", quote=True)
         msg.reply_to_message = message
         query = message.text
         item_id = query.rsplit("/", 1)[1]
@@ -61,7 +61,7 @@ async def download(client: Bot, message: Message|CallbackQuery):
                 await download_tool(client, message, msg, song_id)
             page_no += 1
     else:
-        await msg.edit("Artists and Podcast upload not supported.")
+        await msg.edit("**ᴀʀᴛɪsᴛs ᴀɴᴅ ᴘᴏᴅᴄᴀsᴛs ᴜᴘʟᴏᴀᴅ ɴᴏᴛ sᴜᴘᴘᴏʀᴛᴇᴅ!**")
         return
 
     if "Failed" not in msg.text:
@@ -110,11 +110,11 @@ async def download_tool(client: Bot, message: Message|CallbackQuery, msg: Messag
     # Create caption
     text_data = [
         f"[\u2063]({image_url})"
-        f"**🎧 Song:** [{title}]({song_url})" if title else '',
-        f"**📚 Album:** [{album}]({album_url})" if album else '',
-        f"**📰 Language:** {language}" if language else '',
-        f"**📆 Release Date:** __{release_date}__" if release_date else '',
-        f"**📆 Release Year:** __{release_year}__" if not release_date and release_year else '',
+        f"**🎧 sᴏɴɢ:** [{title}]({song_url})" if title else '',
+        f"**📚 ᴀʟʙᴜᴍ:** [{album}]({album_url})" if album else '',
+        f"**📰 ʟᴀɴɢᴜᴀɢᴇ:** {language}" if language else '',
+        f"**📆 ʀᴇʟᴇᴀsᴇ ᴅᴀᴛᴇ:** __{release_date}__" if release_date else '',
+        f"**📆 ʀᴇʟᴇᴀsᴇ ʏᴇᴀʀ:** __{release_year}__" if not release_date and release_year else '',
     ]
 
     caption = "\n\n".join(filter(None, text_data))
@@ -127,7 +127,7 @@ async def download_tool(client: Bot, message: Message|CallbackQuery, msg: Messag
     file_name = f"{download_dir}{title}_{quality}.mp3"
     thumbnail_location = f"{download_dir}{title}.jpg"
 
-    await msg.edit(f"__📥 Downloading {title}__")
+    await msg.edit(f"__📥 ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ {title}__")
     await client.send_chat_action(
         chat_id=message.from_user.id,
         action=ChatAction.RECORD_AUDIO
@@ -139,7 +139,7 @@ async def download_tool(client: Bot, message: Message|CallbackQuery, msg: Messag
                 await file.write(await response.read())
 
     audio = await Jiosaavn().download_song(song_id=song_id, bitrate=bitrate, download_location=file_name)
-    await msg.edit(f"__📤 Uploading {title}__")
+    await msg.edit(f"__📤 ᴜᴘʟᴏᴀᴅɪɴɢ {title}__")
     await client.send_chat_action(
         chat_id=message.from_user.id,
         action=ChatAction.UPLOAD_AUDIO
@@ -157,7 +157,7 @@ async def download_tool(client: Bot, message: Message|CallbackQuery, msg: Messag
         )
     
     if not song_file:
-        return await msg.edit(text=f"Failed to upload {song}")
+        return await msg.edit(text=f"**ғᴀɪʟᴇᴅ ᴛᴏ ᴜᴘʟᴏᴀᴅ** {song}\n\n**⚠ ᴘᴏssɪʙʟᴇ ʀᴇᴀsᴏɴs -\n1. ɴᴏᴛ ʏᴇᴛ ɪɴ ᴏᴜʀ sᴏɴɢs ʟɪsᴛ\n2. ᴇɴᴛᴇʀᴇᴅ sᴘᴇʟʟɪɴɢ ɪs ᴡʀᴏɴɢ\n3. ᴜɴᴋɴᴏᴡɴ ᴀᴘɪ ᴇʀʀᴏʀ**")
 
     await client.db.update_song(song_id, quality, song_file.chat.id, song_file.id)
     shutil.rmtree(download_dir)
