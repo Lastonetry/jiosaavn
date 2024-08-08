@@ -2,7 +2,7 @@ import logging
 import random
 from jiosaavn.bot import Bot
 
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 logger = logging.getLogger(__name__)
