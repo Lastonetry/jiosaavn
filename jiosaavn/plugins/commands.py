@@ -1,5 +1,5 @@
 import logging
-
+import random
 from jiosaavn.bot import Bot
 
 from pyrogram import filters
@@ -7,51 +7,64 @@ from pyrogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineK
 
 logger = logging.getLogger(__name__)
 
-@Bot.on_callback_query(filters.regex('^home$'))
-@Bot.on_message(filters.command('start') & filters.private & filters.incoming)
-async def start_handler(cient: Bot, message: Message|CallbackQuery):
+PICS = [
+    "https://telegra.ph/file/d29775a7d90ef0df078eb.jpg",
+    "https://telegra.ph/file/e84daa9262350a1aceaf1.jpg",
+    "https://telegra.ph/file/caa42944be7f3642ea361.jpg",
+    "https://telegra.ph/file/497274e0cc115b572443b.jpg",
+    "https://telegra.ph/file/94d1384fcd6a3e9c1ce99.jpg",
+    "https://telegra.ph/file/1d5aa8a00ff0f90eecff8.jpg",
+    "https://telegra.ph/file/adb9fb93ad14f83a05527.jpg"
+]
+
+@Client.on_callback_query(filters.regex('^home$'))
+@Client.on_message(filters.command('start') & filters.private & filters.incoming)
+async def start_handler(client: Client, message: Message|CallbackQuery):
     text = (
-        f"Hello {message.from_user.mention},\n\n"
-        "Welcome to the JioSaavn Telegram Bot! "
-        "This powerful bot allows you to search and download songs, playlists, albums, and artists directly from JioSaavn.\n\n"
-        "With this bot, you can:\n"
-        "- Search for songs, albums, playlists, and artists\n"
-        "- Download your favorite tracks directly to Telegram\n"
-        "- Explore various features tailored to enhance your music experience\n\n"
-        "**Maintained By:** [Anonymous](https://t.me/Ns_AnoNymous)"
+        f"*ʜᴇʏᴀ! {message.from_user.mention} ✨\n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n"
+        "ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴛʜᴇ  Bot! "
+        "ᴛʜɪs ɪs ᴀ ᴘᴏᴡᴇʀғᴜʟ ʙᴏᴛ, ᴀɴᴅ ᴀʟʟᴏᴡs ʏᴏᴜ ᴛᴏ sᴇᴀʀᴄʜ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ ғᴏʀ sᴏɴɢs, ᴘʟᴀʏʟɪsᴛs, ᴀʟʙᴜᴍs ᴀɴᴅ ᴀʀᴛɪsᴛs ᴅɪʀᴇᴄᴛʟʏ ғʀᴏᴍ sᴘᴏᴛɪғʏ\n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n"
+        "ᴡɪᴛʜ ᴛʜɪs ʙᴏᴛ, ʏᴏᴜ ᴄᴀɴ:\n"
+        "- sᴇᴀʀᴄʜ ғᴏʀ sᴏɴɢs, ᴘʟᴀʏʟɪsᴛs, ᴀʟʙᴜᴍs ᴀɴᴅ ᴀʀᴛɪsᴛs\n"
+        "- ᴅᴏᴡɴʟᴏᴀᴅ ʏᴏᴜʀ ғᴀᴠᴏᴜʀɪᴛᴇ ᴛʀᴀᴄᴋs ᴅɪʀᴇᴄᴛʟʏ ᴛᴏ ᴛᴇʟᴇɢʀᴀᴍ\n"
+        "- ᴇxᴘʟᴏʀᴇ ᴠᴀʀɪᴏᴜs ғᴇᴀᴛᴜʀᴇs ᴛᴀɪʟᴏʀᴇᴅ ᴛᴏ ᴇɴʜᴀɴᴄᴇ ʏᴏᴜʀ ᴍᴜsɪᴄ ᴇxᴘᴇʀɪᴇɴᴄᴇ\n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n"
+        "🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ:* [ᴍᴏɢɢᴇʀ](https://t.me/MoggerKing)"
     )
 
     buttons = [[
-        InlineKeyboardButton('My Father 🧑', url='https://t.me/Ns_AnoNymous'),
-        InlineKeyboardButton('About 📕', callback_data='about')
+        InlineKeyboardButton('♡ ᴘʟᴀʏʟɪsᴛ', url='https://t.me/W_Collections'),
+        InlineKeyboardButton('sᴇᴛᴛɪɴɢs ⚙', callback_data='settings')
         ],[
-        InlineKeyboardButton('Help 💡', callback_data='help'),
-        InlineKeyboardButton('Settings ⚙', callback_data='settings')
+        InlineKeyboardButton('♻️ ʜᴇʟᴘ', callback_data='help'),
+        InlineKeyboardButton('💠 ᴀʙᴏᴜᴛ', callback_data='about')
         ],[
-        InlineKeyboardButton('Open Source Repository 🌐', url='https://github.com/Ns-AnoNymouS/jiosaavn')
+        InlineKeyboardButton('ᴅᴇᴠᴇʟᴏᴘᴇʀ 🧑‍💻', url='https://t.me/MoggerKing')
     ]]
+
+    # Choose a random image from the list
+    random_image = random.choice(PICS)
     if isinstance(message, Message):
-        await message.reply_text(text, reply_markup=InlineKeyboardMarkup(buttons), quote=True)
+        await message.reply_photo(random_image, caption=text, reply_markup=InlineKeyboardMarkup(buttons), quote=True)
     else:
-        await message.message.edit(text, reply_markup=InlineKeyboardMarkup(buttons))
+        await message.message.edit_text(text, reply_markup=InlineKeyboardMarkup(buttons))
 
 @Bot.on_callback_query(filters.regex('^help$'))
 @Bot.on_message(filters.command('help') & filters.private & filters.incoming)
 async def help_handler(client: Bot, message: Message | CallbackQuery):
     text = (
-        "**It's very simple to use me! 😉**\n\n"
-        "1. Start by configuring your preferences using the `/settings` command.\n"
-        "2. Send me the name of a song, playlist, album, or artist you want to search for.\n"
-        "3. I'll handle the rest and provide you with the results!\n\n"
-        "Feel free to explore and enjoy the music!"
+        "**ɪᴛ's ᴠᴇʀʏ sɪᴍᴘʟᴇ ᴛᴏ ᴜsᴇ ᴍᴇ! 😉**\n\n"
+        "1. sᴛᴀʀᴛ ʙʏ ᴄᴏɴғɪɢᴜʀɪɴɢ ʏᴏᴜʀ ᴘʀᴇғᴇʀᴇɴᴄᴇs ᴜsɪɴɢ ᴛʜᴇ `/settings` ᴄᴏᴍᴍᴀɴᴅ.\n"
+        "2. sᴇɴᴅ ᴍᴇ ᴛʜᴇ ɴᴀᴍᴇ ᴏғ ᴀ sᴏɴɢ, ᴘʟᴀʏʟɪsᴛ, ᴀʟʙᴜᴍ, ᴏʀ ᴀʀᴛɪsᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ sᴇᴀʀᴄʜ ғᴏʀ.\n"
+        "3. ɪ'ʟʟ ʜᴀɴᴅʟᴇ ᴛʜᴇ ʀᴇsᴛ ᴀɴᴅ ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ʏᴏᴜ ᴡɪᴛʜ ᴛʜᴇ ʀᴇsᴜʟᴛs!\n\n"
+        "ғᴇᴇʟ ғʀᴇᴇ ᴛᴏ ᴇxᴘʟᴏʀᴇ ᴛʜᴇ ʙᴇᴀᴜᴛʏ ᴏғ ᴍᴜsɪᴄ ♡"
     )
 
     buttons = [[
-        InlineKeyboardButton('About 📕', callback_data='about'),
-        InlineKeyboardButton('Settings ⚙', callback_data='settings')
+        InlineKeyboardButton('💠 ᴀʙᴏᴜᴛ', callback_data='about'),
+        InlineKeyboardButton('sᴇᴛᴛɪɴɢs ⚙', callback_data='settings')
         ],[
-        InlineKeyboardButton('Home 🏕', callback_data='home'),
-        InlineKeyboardButton('Close ❌', callback_data='close')
+        InlineKeyboardButton('ʜᴏᴍᴇ ↺', callback_data='home'),
+        InlineKeyboardButton('ᴄʟᴏsᴇ ❌', callback_data='close')
     ]]
 
     if isinstance(message, Message):
@@ -65,21 +78,21 @@ async def about(client: Bot, message: Message|CallbackQuery):
     me = await client.get_me()
 
     text = (
-        f"**🤖 Bot Name:** {me.mention()}\n\n"
-        "**📝 Language:** [Python 3](https://www.python.org/)\n\n"
-        "**🧰 Framework:** [Pyrogram](https://github.com/pyrogram/pyrogram)\n\n"
-        "**👨‍💻 Developer:** [Anonymous](https://t.me/Ns_AnoNymouS)\n\n"
-        "**📢 Updates Channel:** [NS Bots](https://t.me/NsBotsOfficial)\n\n"
-        "**👥 Support Group:** [AMC Support](https://t.me/amcDevSupport)\n\n"
-        "**🔗 Source Code:** [GitHub Repository](https://github.com/Ns-AnoNymouS/jiosaavn)\n\n"
+        f"**🤖 ᴍʏ ɴᴀᴍᴇ:** {me.mention()}\n\n"
+        "**📝 ʟᴀɴɢᴜᴀɢᴇ:** [Python 3](https://www.python.org/)\n\n"
+        "**🧰 ғʀᴀᴍᴇᴡᴏʀᴋ:** [Pyrogram](https://github.com/pyrogram/pyrogram)\n\n"
+        "**🧑‍💻 ᴅᴇᴠ:** [Anonymous](https://t.me/Ns_AnoNymouS)\n\n"
+        "**📢 ᴜᴘᴅᴀᴛᴇs:** [ʜᴇʟᴘᴇʀ ʜᴀɴᴅ](https://t.me/aHelperHand)\n\n"
+        "**👥 sᴜᴘᴘᴏʀᴛ:** [ᴛᴇsᴛ sɪᴛᴇ](https://t.me/ProjectsSite)\n\n"
+        "**🔗 sʀᴄ ᴄᴏᴅᴇ:** [ᴘʀɪᴠᴀᴛᴇ](https://t.me/BillionarieCult)\n\n"
     )
 
     buttons = [[
-        InlineKeyboardButton('Help 💡', callback_data='help'),
-        InlineKeyboardButton('Settings ⚙', callback_data='settings')
+        InlineKeyboardButton('ʜᴇʟᴘ ♻️', callback_data='help'),
+        InlineKeyboardButton('sᴇᴛᴛɪɴɢs ⚙', callback_data='settings')
         ],[
-        InlineKeyboardButton('Home 🏕', callback_data='home'),
-        InlineKeyboardButton('Close ❌', callback_data='close')
+        InlineKeyboardButton('ʜᴏᴍᴇ ↻', callback_data='home'),
+        InlineKeyboardButton('ᴄʟᴏsᴇ ❌', callback_data='close')
     ]]
     if isinstance(message, Message):
         await message.reply_text(text, reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True, quote=True)
