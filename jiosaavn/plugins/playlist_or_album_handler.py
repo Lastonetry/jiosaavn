@@ -26,11 +26,11 @@ async def playlist_or_album(client: Bot, callback: CallbackQuery):
     try:
         response = await Jiosaavn().get_playlist_or_album(album_id=album_id, playlist_id=playlist_id, page_no=page_no)
         if not response or not response.get("list"):
-            return await callback.message.edit(f"**The requested {search_type} could not be found.**")
+            return await callback.message.edit(f"**ᴛʜᴇ ʀᴇϙᴜᴇsᴛᴇᴅ {search_type} ᴄᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ғᴏᴜɴᴅ.**")
     except RuntimeError as e:
         logger.error(e)
         traceback.print_exc()
-        return await callback.message.edit("Connection refused by JioSaavn API. Please try again.")
+        return await callback.message.edit("ᴄᴏɴɴᴇᴄᴛɪᴏɴ ʀᴇғᴜsᴇᴅ ʙʏ ᴀᴘɪ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ, ᴏʀ sᴇᴀʀᴄʜ ᴀɴᴏᴛʜᴇʀ")
 
     title = html.unescape(response.get("title", ""))
     total_results = int(response.get("list_count", 0))
@@ -57,26 +57,26 @@ async def playlist_or_album(client: Bot, callback: CallbackQuery):
 
     navigation_buttons = []
     if page_no > 1:
-        navigation_buttons.append(InlineKeyboardButton("⬅️", callback_data=f"{search_type}#{item_id}#{page_no-1}"))
+        navigation_buttons.append(InlineKeyboardButton("⇇", callback_data=f"{search_type}#{item_id}#{page_no-1}"))
     if total_results > 10 * page_no:
-        navigation_buttons.append(InlineKeyboardButton("➡️", callback_data=f"{search_type}#{item_id}#{page_no+1}"))
+        navigation_buttons.append(InlineKeyboardButton("⇉", callback_data=f"{search_type}#{item_id}#{page_no+1}"))
     if navigation_buttons:
         buttons.append(navigation_buttons)
 
-    buttons.append([InlineKeyboardButton('Upload Album 📤', callback_data=f'upload#{item_id}#{search_type}')])
-    buttons.append([InlineKeyboardButton('Close ❌', callback_data="close")])
+    buttons.append([InlineKeyboardButton('ᴜᴘʟᴏᴀᴅ ᴀʟʙᴜᴍ 📤', callback_data=f'upload#{item_id}#{search_type}')])
+    buttons.append([InlineKeyboardButton('ᴄʟᴏsᴇ ❌', callback_data="close")])
     back_callback_data = f"search#{back_type}" if back_type else f"search#{search_type}s"
-    buttons.append([InlineKeyboardButton("🔙 Back", callback_data=back_callback_data)])
+    buttons.append([InlineKeyboardButton("⇋ ʙᴀᴄᴋ ⇋", callback_data=back_callback_data)])
 
-    search_type_text = "💾 Playlist" if playlist_id else "📚 Album"
+    search_type_text = "💾 ᴘʟᴀʏʟɪsᴛ" if playlist_id else "📚 ᴀʟʙᴜᴍ"
     text_data = (
         f"[\u2063]({image_url})"
         f"**{search_type_text}:** [{title}]({perma_url})",
-        f"**📜 Page No:** {page_no}",
-        f"**🕰 Duration:** {format_timespan(duration)}" if duration else "",
-        f"**🔊 Total Songs:** {total_results}" if total_results else "",
-        f"**👥 Followers:** {followers:,}" if followers else "",
-        f"**📆 Release Year:** __{release_year}__" if release_year else ''
+        f"**📜 ᴘᴀɢᴇ ɴᴏ:** {page_no}",
+        f"**🕰 ᴅᴜʀᴀᴛɪᴏɴ:** {format_timespan(duration)}" if duration else "",
+        f"**🔊 ᴛᴏᴛᴀʟ sᴏɴɢs:** {total_results}" if total_results else "",
+        f"**👥 ғᴏʟʟᴏᴡᴇʀs:** {followers:,}" if followers else "",
+        f"**📆 ʀᴇʟᴇᴀsᴇ ʏᴇᴀʀ:** __{release_year}__" if release_year else ''
     )
     text = "\n\n".join(filter(None, text_data))
 
