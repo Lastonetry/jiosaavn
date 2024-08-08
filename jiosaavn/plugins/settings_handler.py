@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 @Bot.on_callback_query(filters.regex(r"^settings"))
 async def settings(client: Bot, message: Message|CallbackQuery):
     if isinstance(message, Message):
-        msg = await message.reply("Processing...", quote=True)
+        msg = await message.reply("ᴘʀᴏᴄᴇssɪɴɢ...", quote=True)
     else:
         msg = message.message
         await message.answer()
@@ -24,17 +24,17 @@ async def settings(client: Bot, message: Message|CallbackQuery):
     type = user['type']
     quality = user['quality']
 
-    all = '✅ All' if type == 'all' else 'All'
-    albums = '✅ Albums' if type == 'albums' else 'Albums' 
-    songs = '✅ Songs' if type == 'songs' else 'Songs'
-    playlists = '✅ Playlist' if type == 'playlists' else 'Playlist'
+    all = 'ᴀʟʟ ✅' if type == 'all' else 'All'
+    albums = 'ᴀʟʙᴜᴍ ✅' if type == 'albums' else 'Albums' 
+    songs = 'sᴏɴɢs ✅' if type == 'songs' else 'Songs'
+    playlists = 'ᴘʟᴀʏʟɪsᴛ ✅' if type == 'playlists' else 'Playlist'
     
-    quality_320 = '✅ 320kbps' if quality == '320kbps' else '320kbps'
-    quality_160 = '✅ 160kbps' if quality == '160kbps' else '160kbps'
+    quality_320 = '320kbps ✅' if quality == '320kbps' else '320kbps'
+    quality_160 = '160kbps ✅' if quality == '160kbps' else '160kbps'
     
     buttons = [
         [
-            InlineKeyboardButton("Search Type 🔍", callback_data="dummy"),
+            InlineKeyboardButton("⇊ sᴇᴀʀᴄʜ ᴛʏᴘᴇ ⇊", callback_data="dummy"),
         ],
         [
             InlineKeyboardButton(all, callback_data='settings#type#all'),
@@ -45,7 +45,7 @@ async def settings(client: Bot, message: Message|CallbackQuery):
             InlineKeyboardButton(playlists, callback_data='settings#type#playlists'),
         ],
         [
-            InlineKeyboardButton("Audio Quaulity 🔊", callback_data="dummy"),
+            InlineKeyboardButton("⇊ ᴀᴜᴅɪᴏ ϙᴜᴀʟɪᴛʏ ⇊", callback_data="dummy"),
         ],
         [
             InlineKeyboardButton(quality_320, callback_data='settings#quality#320kbps'),
@@ -53,7 +53,7 @@ async def settings(client: Bot, message: Message|CallbackQuery):
         ]
     ]
 
-    text = '**Select the search result type and music quality 🧏‍♂️**'
+    text = '**sᴇʟᴇᴄᴛ ᴛʜᴇ sᴇᴀʀᴄʜ ᴛʏᴘᴇ ᴀɴᴅ ᴍᴜsɪᴄ ϙᴜᴀʟɪᴛʏ ʏᴏᴜ ᴡᴀɴᴛ 🧏‍♂️**'
     try:
         await msg.edit(text, reply_markup=InlineKeyboardMarkup(buttons))
     except MessageNotModified:
@@ -61,4 +61,4 @@ async def settings(client: Bot, message: Message|CallbackQuery):
 
 @Bot.on_callback_query(filters.regex(r"^dummy$"))
 async def dummy(client: Bot, callback: CallbackQuery):
-    await callback.answer("Please try selecting another button.", show_alert=True)
+    await callback.answer("sᴇʟᴇᴄᴛ ғʀᴏᴍ ʙᴇʟᴏᴡ ᴅᴜᴍʙᴀss 🚸", show_alert=True)
