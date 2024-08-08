@@ -21,16 +21,16 @@ async def artist(client: Bot, callback: CallbackQuery):
     try:
         response = await Jiosaavn().get_artist(artist_id=artist_id, page_no=page_no)
         if not response or not response.get("topSongs"):
-            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back", callback_data="search#artists")]])
+            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("⇋ ʙᴀᴄᴋ ⇋", callback_data="search#artists")]])
             return await callback.message.edit(
-                "**Currently, only songs by this artist are displayed.\n\n"
-                "No additional songs are available at the moment**",
+                "**ᴄᴜʀʀᴇɴᴛʟʏ, ᴏɴʟʏ sᴏɴɢs ʙʏ ᴛʜɪs ᴀʀᴛɪsᴛ ᴀʀᴇ ʙᴇɪɴɢ ᴅɪsᴘʟᴀʏᴇᴅ.\n\n"
+                "ɴᴏ ᴀᴅᴅɪᴛɪᴏɴᴀʟ sᴏɴɢs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ ᴀᴛ ᴛʜᴇ ᴍᴏᴍᴇɴᴛ**",
                 reply_markup=reply_markup
             )
     except RuntimeError as e:
         logger.error(e)
         traceback.print_exc()
-        return await msg.edit("Connection refused by JioSaavn API. Please try again.")
+        return await msg.edit("**ᴄᴏɴɴᴇᴄᴛɪᴏɴ ʀᴇғᴜsᴇᴅ ʙʏ sᴘᴏᴛɪғʏ ᴀᴘɪ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ.**")
 
     name = response.get("name")
     songs = response.get("topSongs")
@@ -62,15 +62,15 @@ async def artist(client: Bot, callback: CallbackQuery):
     if navigation_buttons:
         buttons.append(navigation_buttons)
 
-    buttons.append([InlineKeyboardButton("🔙 Back", callback_data="search#artists")])
+    buttons.append([InlineKeyboardButton("⇋ ʙᴀᴄᴋ ⇋", callback_data="search#artists")])
 
     text_data = (
         f"[\u2063]({image_url})"
-        f"**👨‍🎤 Artist:** [{name}]({artist_url})" if name else '',
-        f"**📜 Page No:** {page_no}",
-        f"**🔊 Total Songs:** {total_results}" if total_results else "",
-        f"**👥 Followers:** {follower_count:,}" if follower_count else "",
-        f"**📆 Date of Birth:** __{dob}__" if dob else '',
+        f"**👨‍🎤 ᴀʀᴛɪsᴛ:** [{name}]({artist_url})" if name else '',
+        f"**📜 ᴘᴀɢᴇ ɴᴏ:** {page_no}",
+        f"**🔊 ᴛᴏᴛᴀʟ sᴏɴɢs:** {total_results}" if total_results else "",
+        f"**👥 ғᴏʟʟᴏᴡᴇʀs:** {follower_count:,}" if follower_count else "",
+        f"**📆 ᴅᴀᴛᴇ ᴏғ ʙɪʀᴛʜ:** __{dob}__" if dob else '',
     )
     text = "\n\n".join(filter(None, text_data))
 
